@@ -86,26 +86,33 @@ namespace PraticalTask3_LinearAndBinarySearch
     }
     class UserInput
     {
+        static char binaryOrLinear;
+        static string searchMovieRequest;
+        static bool searchLoop = true;
+        static bool searchingLoop = true;
 
         public static void UserSearch()
         {
             //declare variables
-            string searchMovieRequest;
-            string searchMovieFile;
-            bool binaryOrLinear;
-            bool continueFlag = true;
-            char keyPressed;
-            bool fileLoop = true;
-            char fileKey;
+            bool continueFlag = true;           
             var chosenFile = new List<string>();
-            //initial message as do not want to repeat message every loop
-            Console.WriteLine("Do you wish to perform a movie search?");
-            Console.WriteLine("Press Y to procceed or N to cancel");
+            char keyPressed;
+            char fileKey;
+            
+
             //loop for user to keep searching
             while (continueFlag)
             {
+                //create bools and reset to true for mutiple file searches
+                bool searchFileAgain = true;
+                bool fileLoop = true;
+                searchingLoop = true;
+                searchLoop = true;
+                //initial message
+                Console.WriteLine("\r\nDo you wish to perform a movie search?");
+                Console.WriteLine("Press Y to procceed or N to cancel");
                 //save key pressed  
-                keyPressed = Console.ReadKey().KeyChar;
+                keyPressed = Console.ReadKey(true).KeyChar;
                 //perform search move into next step
                 if (keyPressed == 'y')
                 {
@@ -123,7 +130,8 @@ namespace PraticalTask3_LinearAndBinarySearch
                     //loop til a file is chosen
                     while (fileLoop)
                     {
-                        fileKey = Console.ReadKey().KeyChar;
+
+                        fileKey = Console.ReadKey(true).KeyChar;
                         // if statements to decide which list to create and use
                         //20 list
                         if (fileKey == '1')
@@ -132,6 +140,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile20Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles20.txt";
                             movieList20 = File.ReadAllLines(movieFile20Path).ToList();
                             chosenFile = movieList20;
+                            fileLoop = false;
                         }
                         //100 list
                         else if (fileKey == '2')
@@ -140,6 +149,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile100Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\moviesTopGrossing100.txt";
                             movieList100 = File.ReadAllLines(movieFile100Path).ToList();
                             chosenFile = movieList100;
+                            fileLoop = false;
                         }
                         //200 list
                         else if (fileKey == '3')
@@ -148,6 +158,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile200Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\moviesTopGrossing200.txt";
                             movieList200 = File.ReadAllLines(movieFile200Path).ToList();
                             chosenFile = movieList200;
+                            fileLoop = false;
                         }
                         //100k list
                         else if (fileKey == '4')
@@ -156,6 +167,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile100kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles100K.txt";
                             movieList100k = File.ReadAllLines(movieFile100kPath).ToList();
                             chosenFile = movieList100k;
+                            fileLoop = false;
                         }
                         //400k list
                         else if (fileKey == '5')
@@ -164,6 +176,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile400kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles400K.txt";
                             movieList400k = File.ReadAllLines(movieFile400kPath).ToList();
                             chosenFile = movieList400k;
+                            fileLoop = false;
                         }
                         //2mil list
                         else if (fileKey == '6')
@@ -172,18 +185,63 @@ namespace PraticalTask3_LinearAndBinarySearch
                             string movieFile2milPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\MovieTitles_2million.txt";
                             movieList2mil = File.ReadAllLines(movieFile2milPath).ToList();
                             chosenFile = movieList2mil;
+                            fileLoop = false;
                         }
                         else
                         {
                             Console.WriteLine("Press 1, 2, 3, 4, 5, 6 for the file you wish to load");
                         }
-                        Console.WriteLine("fileKey = {0}", fileKey);
                     }
 
-                    //test to see loop working
-                    Console.WriteLine("keyPressed = {0}", keyPressed);
-                    
                     //loop til search method is chosen
+                    while(searchLoop)
+                    {
+                        Console.WriteLine("Press B for binary search or press L for linear search");
+                        binaryOrLinear = Console.ReadKey(true).KeyChar;
+                        if(binaryOrLinear == 'b')
+                        {
+                            searchLoop = false;
+                        }
+                        else if (binaryOrLinear == 'l')
+                        {
+                            searchLoop = false;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid key pressed");
+                        }
+                    }
+                  
+                    //loop til searching is done in current file
+                    while(searchingLoop)
+                    {
+                        //request search item
+                        Console.WriteLine("Enter the movie you wish to search for:\r\n");
+                        searchMovieRequest = Console.ReadLine();
+                        
+                        //perform search
+                        if(binaryOrLinear == 'b')
+                        {
+                            BinarySearch.Search(chosenFile, searchMovieRequest, 0, chosenFile.Count - 1);
+                        }
+                        else
+                        {
+                            Console.WriteLine(LinearSearch.Search(chosenFile, searchMovieRequest));
+                        }
+                        //ask user if want to perform another search on the same file
+                        while (searchFileAgain)
+                        {
+                            Console.WriteLine("Do you wish to search this file again? \r\n Press y for yes or n for no");
+                            char keyPress = Console.ReadKey(true).KeyChar;
+                            if(keyPress == 'y') { searchFileAgain = true; break; }
+                            else if(keyPress == 'n') { searchingLoop = false; searchFileAgain = false; }
+                            else
+                            {
+                                Console.WriteLine("Incorrect key pressed, press y to search file again or n to end search");
+                            }
+                        }
+                    }
+                    
                 }
                 //end while loop statement
                 else if (keyPressed == 'n')
