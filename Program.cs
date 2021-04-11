@@ -14,9 +14,9 @@ namespace PraticalTask3_LinearAndBinarySearch
 
             List<string> movieList2 = new List<string> { "movie1", "movie2", "movie3", "movie4", "movie5", "movie6" };
             Console.WriteLine("Expected position for movie1 is 0 and for movie4 is 3 and movie7 is -1");
-            Console.WriteLine("Movie position for movie1 is at: {0}", BinarySearch.Search(movieList, "movie1", 0, movieList2.Count - 1));
-            Console.WriteLine("Movie position for movie4 is at: {0}", BinarySearch.Search(movieList, "movie4", 0, movieList2.Count - 1));
-            Console.WriteLine("Movie position for movie7 is at: {0}", BinarySearch.Search(movieList, "movie7", 0, movieList2.Count - 1));
+            Console.WriteLine("Movie position for movie1 is at: {0}", BinarySearch.Search(movieList2, "movie1", 0, movieList2.Count - 1));
+            Console.WriteLine("Movie position for movie4 is at: {0}", BinarySearch.Search(movieList2, "movie4", 0, movieList2.Count - 1));
+            Console.WriteLine("Movie position for movie7 is at: {0}", BinarySearch.Search(movieList2, "movie7", 0, movieList2.Count - 1));
         }
     }
     class LinearSearch
@@ -49,10 +49,7 @@ namespace PraticalTask3_LinearAndBinarySearch
             //check to see if left is smaller as it means the list hasn't been fully searched
             if (left < right)
             {
-                int middle = (left + right) / 2;
-                Console.WriteLine("this is middle {0}", middle);
-                Console.WriteLine(searchItem.CompareTo(movieList[middle]));
-                
+                int middle = (left + right-1) / 2;     
                 //if middle indexed item == searchItem then found, otherwise compare to see if larger or smaller
                 if (movieList[middle] == searchItem)
                 {
