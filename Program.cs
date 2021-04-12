@@ -51,11 +51,10 @@ namespace PraticalTask3_LinearAndBinarySearch
         public static int Search(List<string> movieList, string searchItem, int left, int right)
         {
             int recordPosition = 0;
-
             //check to see if left is smaller as it means the list hasn't been fully searched
-            if (left < right)
+            if (left <= right)
             {
-                int middle = (left + right - 1) / 2;
+                int middle = (left + right) / 2;
                 //if middle indexed item == searchItem then found, otherwise compare to see if larger or smaller
                 if (movieList[middle] == searchItem)
                 {
@@ -136,54 +135,48 @@ namespace PraticalTask3_LinearAndBinarySearch
                         //20 list
                         if (fileKey == '1')
                         {
-                            List<string> movieList20 = new List<string>();
                             string movieFile20Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles20.txt";
-                            movieList20 = File.ReadAllLines(movieFile20Path).ToList();
+                            List<string> movieList20 = File.ReadAllLines(movieFile20Path).ToList();
                             chosenFile = movieList20;
                             fileLoop = false;
                         }
                         //100 list
                         else if (fileKey == '2')
                         {
-                            List<string> movieList100 = new List<string>();
-                            string movieFile100Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\moviesTopGrossing100.txt";
-                            movieList100 = File.ReadAllLines(movieFile100Path).ToList();
+                            string movieFile100Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles100.txt";
+                            List<string> movieList100 = File.ReadAllLines(movieFile100Path).ToList();
                             chosenFile = movieList100;
                             fileLoop = false;
                         }
                         //200 list
                         else if (fileKey == '3')
                         {
-                            List<string> movieList200 = new List<string>();
                             string movieFile200Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\moviesTopGrossing200.txt";
-                            movieList200 = File.ReadAllLines(movieFile200Path).ToList();
+                            List<string> movieList200 = File.ReadAllLines(movieFile200Path).ToList();
                             chosenFile = movieList200;
                             fileLoop = false;
                         }
                         //100k list
                         else if (fileKey == '4')
                         {
-                            List<string> movieList100k = new List<string>();
                             string movieFile100kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles100K.txt";
-                            movieList100k = File.ReadAllLines(movieFile100kPath).ToList();
+                            List<string> movieList100k = File.ReadAllLines(movieFile100kPath).ToList();
                             chosenFile = movieList100k;
                             fileLoop = false;
                         }
                         //400k list
                         else if (fileKey == '5')
                         {
-                            List<string> movieList400k = new List<string>();
                             string movieFile400kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles400K.txt";
-                            movieList400k = File.ReadAllLines(movieFile400kPath).ToList();
+                            List<string> movieList400k = File.ReadAllLines(movieFile400kPath).ToList();
                             chosenFile = movieList400k;
                             fileLoop = false;
                         }
                         //2mil list
                         else if (fileKey == '6')
                         {
-                            List<string> movieList2mil = new List<string>();
                             string movieFile2milPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\MovieTitles_2million.txt";
-                            movieList2mil = File.ReadAllLines(movieFile2milPath).ToList();
+                            List<string> movieList2mil = File.ReadAllLines(movieFile2milPath).ToList();
                             chosenFile = movieList2mil;
                             fileLoop = false;
                         }
@@ -219,11 +212,14 @@ namespace PraticalTask3_LinearAndBinarySearch
                         Console.WriteLine("Enter the movie you wish to search for:\r\n");
                         searchMovieRequest = Console.ReadLine();
                         
-                        //perform search
+                        //perform binary search
                         if(binaryOrLinear == 'b')
                         {
-                            BinarySearch.Search(chosenFile, searchMovieRequest, 0, chosenFile.Count - 1);
+                            //perform initial sort to ensure list is sorted
+                            chosenFile.Sort();
+                            Console.WriteLine(BinarySearch.Search(chosenFile, searchMovieRequest, 0, chosenFile.Count - 1));
                         }
+                        //perform linear search
                         else
                         {
                             Console.WriteLine(LinearSearch.Search(chosenFile, searchMovieRequest));
