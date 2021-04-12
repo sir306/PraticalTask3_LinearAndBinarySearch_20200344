@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 
 namespace PraticalTask3_LinearAndBinarySearch
 {
@@ -27,6 +28,7 @@ namespace PraticalTask3_LinearAndBinarySearch
     }
     class LinearSearch
     {
+        static int counter;
         public static int Search(List<string> movieList, string searchItem)
         {
             bool flag = false;
@@ -34,6 +36,7 @@ namespace PraticalTask3_LinearAndBinarySearch
             //itterate through list till item is found or not
             foreach (string movie in movieList)
             {
+                counter++;
                 if (movie == searchItem)
                 {
                     flag = true;
@@ -42,22 +45,42 @@ namespace PraticalTask3_LinearAndBinarySearch
                 //movie not at current index increase recordPosition
                 recordPosition++;
             }
-            if (flag == false) { return recordPosition = -1; }
-            else { return recordPosition; }
+            if (flag == false) 
+            {
+                //display counter 
+                Console.WriteLine("There was {0} comparisons in the list.", counter);
+                //reset counter
+                counter = 0;
+                return recordPosition = -1; 
+            }
+            else 
+            {
+                //display counter 
+                Console.WriteLine("There was {0} comparisons in the list.", counter);
+                //reset counter
+                counter = 0;
+                return recordPosition; 
+            }
         }
     }
     class BinarySearch
     {
+        static int counter;
         public static int Search(List<string> movieList, string searchItem, int left, int right)
         {
             int recordPosition = 0;
             //check to see if left is smaller as it means the list hasn't been fully searched
             if (left <= right)
             {
+                counter++;
                 int middle = (left + right) / 2;
                 //if middle indexed item == searchItem then found, otherwise compare to see if larger or smaller
                 if (movieList[middle] == searchItem)
                 {
+                    //display counter 
+                    Console.WriteLine("There was {0} comparisons in the list.", counter);
+                    //reset counter
+                    counter = 0;
                     // movie found
                     recordPosition = middle;
                     return recordPosition;
@@ -79,6 +102,10 @@ namespace PraticalTask3_LinearAndBinarySearch
                     return Search(movieList, searchItem, left, right - 1);
                 }
             }
+            //display counter 
+            Console.WriteLine("There was {0} comparisons in the list.", counter);
+            //reset counter
+            counter = 0;
             recordPosition = -1;
             return recordPosition;
         }
@@ -97,7 +124,8 @@ namespace PraticalTask3_LinearAndBinarySearch
             var chosenFile = new List<string>();
             char keyPressed;
             char fileKey;
-            
+            Stopwatch watch = new Stopwatch();
+            Stopwatch watch2 = new Stopwatch();
 
             //loop for user to keep searching
             while (continueFlag)
@@ -151,7 +179,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                         //200 list
                         else if (fileKey == '3')
                         {
-                            string movieFile200Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\moviesTopGrossing200.txt";
+                            string movieFile200Path = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles200.txt";
                             List<string> movieList200 = File.ReadAllLines(movieFile200Path).ToList();
                             chosenFile = movieList200;
                             fileLoop = false;
@@ -215,14 +243,47 @@ namespace PraticalTask3_LinearAndBinarySearch
                         //perform binary search
                         if(binaryOrLinear == 'b')
                         {
+                            //start stopwatch
+                            watch.Start();
+
                             //perform initial sort to ensure list is sorted
                             chosenFile.Sort();
-                            Console.WriteLine(BinarySearch.Search(chosenFile, searchMovieRequest, 0, chosenFile.Count - 1));
+
+                            //start another stopwatch to time how long it took to find after sort
+                            watch2.Start();
+
+                            //write results
+                            Console.WriteLine("Movie is indexed at {0} in a sorted list.", BinarySearch.Search(chosenFile, searchMovieRequest, 0, chosenFile.Count - 1));
+                            
+                            //stop stopwatchs
+                            watch.Stop();
+                            watch2.Stop();
+                            
+                            //display elapsed time in ms
+                            Console.WriteLine("It took {0}ms to sort then find the item in the list.", watch.ElapsedMilliseconds);
+                            Console.WriteLine("It took {0}ms to find the item in the list.\r\n", watch2.ElapsedMilliseconds);
+
+                            //reset stopwatchs
+                            watch.Reset();
+                            watch2.Reset();
                         }
                         //perform linear search
                         else
                         {
-                            Console.WriteLine(LinearSearch.Search(chosenFile, searchMovieRequest));
+                            //start stopwatch
+                            watch.Start();
+                            
+                            //write results
+                            Console.WriteLine("In an unsorted list the item is indexed at {0}", (LinearSearch.Search(chosenFile, searchMovieRequest)));
+
+                            //stop stopwatch
+                            watch.Stop();
+
+                            //write stopwatch time 
+                            Console.WriteLine("It took {0}ms to find the item.\r\n", watch.ElapsedMilliseconds);
+
+                            //reset stopwatch
+                            watch.Reset();
                         }
                         //ask user if want to perform another search on the same file
                         while (searchFileAgain)
