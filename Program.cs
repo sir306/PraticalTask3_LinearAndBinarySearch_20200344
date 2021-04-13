@@ -1,8 +1,11 @@
-﻿using System;
+﻿/*Binary and Linear Searching, Pratical Task3, Created by Nicholas R. Harding 20200344*/
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using System.Text;
+
 
 namespace PraticalTask3_LinearAndBinarySearch
 {
@@ -10,6 +13,9 @@ namespace PraticalTask3_LinearAndBinarySearch
     {
         static void Main(string[] args)
         {
+            //handle special characters encode console to utf8
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
             //initial build lists
             /*List<string> movieList = new List<string> { "movie1", "movie2", "movie3" };
             Console.WriteLine("Expected position for movie1 is 0 and for movie4 is -1");
@@ -22,6 +28,23 @@ namespace PraticalTask3_LinearAndBinarySearch
             Console.WriteLine("Movie position for movie4 is at: {0}", BinarySearch.Search(movieList2, "movie4", 0, movieList2.Count - 1));
             Console.WriteLine("Movie position for movie7 is at: {0}", BinarySearch.Search(movieList2, "movie7", 0, movieList2.Count - 1));
             Console.WriteLine("Movie position for movie3 is at: {0}", BinarySearch.Search(movieList2, "movie3", 0, movieList2.Count - 1));*/
+
+            //stopwatch create and activate for testing
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            //small list containing 10 items for testing
+            List<string> movieList = new List<string> { "movie1", "movie2", "movie3", "movie4", "movie5", "movie6", "movie7", "movie8", "movie9", "movie10" };
+            Console.WriteLine("Movie position for movie4 is at: {0}", BinarySearch.Search(movieList, "movie4", 0, movieList.Count - 1));
+            Console.WriteLine("It took {0}ms to find the position", watch.ElapsedMilliseconds);
+            watch.Restart();
+            
+            Console.WriteLine("Movie position for movie7 is at: {0}", BinarySearch.Search(movieList, "movie7", 0, movieList.Count - 1));
+            Console.WriteLine("It took {0}ms to find the position", watch.ElapsedMilliseconds);
+            watch.Restart();
+
+            Console.WriteLine("Movie position for movie10 is at: {0}", LinearSearch.Search(movieList, "movie10"));
+            Console.WriteLine("It took {0}ms to find the position", watch.ElapsedMilliseconds);
+            watch.Restart();
             UserInput.UserSearch();
         }
 
@@ -37,13 +60,16 @@ namespace PraticalTask3_LinearAndBinarySearch
             foreach (string movie in movieList)
             {
                 counter++;
-                if (movie == searchItem)
+                if (movie.ToLower() != searchItem.ToLower())
+                {
+                    //movie not at current index increase recordPosition
+                    recordPosition++;
+                }
+                else
                 {
                     flag = true;
                     break;
                 }
-                //movie not at current index increase recordPosition
-                recordPosition++;
             }
             if (flag == false) 
             {
@@ -51,7 +77,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                 Console.WriteLine("There was {0} comparisons in the list.", counter);
                 //reset counter
                 counter = 0;
-                return recordPosition = -1; 
+                return -1; 
             }
             else 
             {
@@ -75,7 +101,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                 counter++;
                 int middle = (left + right) / 2;
                 //if middle indexed item == searchItem then found, otherwise compare to see if larger or smaller
-                if (movieList[middle] == searchItem)
+                if (movieList[middle].ToLower() == searchItem.ToLower())
                 {
                     //display counter 
                     Console.WriteLine("There was {0} comparisons in the list.", counter);
@@ -150,9 +176,10 @@ namespace PraticalTask3_LinearAndBinarySearch
                     Console.WriteLine("Press 1 for Movie list 20");
                     Console.WriteLine("Press 2 for Movie list 100");
                     Console.WriteLine("Press 3 for Movie list 200");
-                    Console.WriteLine("Press 4 for Movie list 100k");
-                    Console.WriteLine("Press 5 for Movie list 400k");
-                    Console.WriteLine("Press 6 for Movie list 2mil");
+                    Console.WriteLine("Press 4 for Movie list 1k");
+                    Console.WriteLine("Press 5 for Movie list 100k");
+                    Console.WriteLine("Press 6 for Movie list 400k");
+                    Console.WriteLine("Press 7 for Movie list 2mil");
 
                     //loop til a file is chosen
                     while (fileLoop)
@@ -184,8 +211,16 @@ namespace PraticalTask3_LinearAndBinarySearch
                             chosenFile = movieList200;
                             fileLoop = false;
                         }
-                        //100k list
+                        //1k list
                         else if (fileKey == '4')
+                        {
+                            string movieFile1kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles1K.txt";
+                            List<string> movieList1k = File.ReadAllLines(movieFile1kPath).ToList();
+                            chosenFile = movieList1k;
+                            fileLoop = false;
+                        }
+                        //100k list
+                        else if (fileKey == '5')
                         {
                             string movieFile100kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles100K.txt";
                             List<string> movieList100k = File.ReadAllLines(movieFile100kPath).ToList();
@@ -193,7 +228,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             fileLoop = false;
                         }
                         //400k list
-                        else if (fileKey == '5')
+                        else if (fileKey == '6')
                         {
                             string movieFile400kPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\movieTitles400K.txt";
                             List<string> movieList400k = File.ReadAllLines(movieFile400kPath).ToList();
@@ -201,7 +236,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                             fileLoop = false;
                         }
                         //2mil list
-                        else if (fileKey == '6')
+                        else if (fileKey == '7')
                         {
                             string movieFile2milPath = @"C:\Users\User\Desktop\class\Algorithms\PraticalTask3_LinearAndBinarySearch\data\searchassessment\MovieTitles_2million.txt";
                             List<string> movieList2mil = File.ReadAllLines(movieFile2milPath).ToList();
@@ -238,7 +273,7 @@ namespace PraticalTask3_LinearAndBinarySearch
                     {
                         //request search item
                         Console.WriteLine("Enter the movie you wish to search for:\r\n");
-                        searchMovieRequest = Console.ReadLine();
+                        searchMovieRequest = ReadLineUTF();
                         
                         //perform binary search
                         if(binaryOrLinear == 'b')
@@ -308,6 +343,28 @@ namespace PraticalTask3_LinearAndBinarySearch
                 }
                 else { Console.WriteLine("Incorrect key pressed, press y to search or n to end search"); }
             }
+        }
+        //added code below to be able to accept russian characters or any other special characters
+        static string ReadLineUTF()
+        {
+            ConsoleKeyInfo currentKey;
+
+            var stringBuilder = new StringBuilder();
+            do
+            {
+                currentKey = Console.ReadKey();
+                // avoid capturing newline and append new char to stringBuilder
+                if (currentKey.Key != ConsoleKey.Enter)
+                    stringBuilder.Append(currentKey.KeyChar);
+
+            }
+            // check if Enter was pressed
+            while (currentKey.Key != ConsoleKey.Enter);
+
+            // move on the next line
+            Console.WriteLine();
+
+            return stringBuilder.ToString();
         }
     }
 }
